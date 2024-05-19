@@ -1,0 +1,3 @@
+[submodule "themes/hugo-theme-mini"]
+	path = themes/hugo-theme-mini
+	url = https://github.com/whaliendev/hugo-theme-mini

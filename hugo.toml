@@ -1,0 +1,9 @@
+baseURL = 'https://example.org/'
+languageCode = 'zh-cn'
+title = "whalien's blog site"
+theme = 'github.com/whaliendev/hugo-theme-mini'
+defaultContentLanguage = 'zh'
+showToc = true
+math = true
+paginate = 5
+paginatePath = 'posts'
