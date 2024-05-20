@@ -1,6 +1,6 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://whalien.space/'
 languageCode = 'zh-cn'
-title = "whalien's blog site"
+title = "whalien's blog"
 theme = 'github.com/whaliendev/hugo-theme-mini'
 defaultContentLanguage = 'zh'
 showToc = true
