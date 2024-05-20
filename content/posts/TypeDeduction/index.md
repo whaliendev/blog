@@ -14,7 +14,7 @@ summary: "Template and auto type deduction have consistent rules, with exception
 
 ### 1 C++ Type Deduction Landscape
 
-![image-20221101214135271](./imgs/2024/05/landscape.png)
+![image-20221101214135271](imgs/landscape.png)
 
 在最开始的时候，也就是C++98，只存在template deduction。对应的rule有两条，一条是给copy by value的，也就是图中的`T`；一条是给传递指针或引用的，也就是图中的`T&/T*`。一切都工作得很自然。
 
@@ -52,7 +52,7 @@ f(rx);
 
 之后你就可以在编译器观察到编译器推断出的类型了：
 
-![image-20221102112008151](./imgs/2024/05/10001.png)
+![image-20221102112008151](imgs/10001.png)
 
 对于`auto`变量，我们可以用`decltype`来获得他的类型，也就是：
 
@@ -63,7 +63,7 @@ auto y = rx;
 TD<decltype(y)> yType; 
 ```
 
-![image-20221102112550216](./imgs/2024/05/10002.png)
+![image-20221102112550216](imgs/10002.png)
 
 在运行时：
 
@@ -291,13 +291,13 @@ auto v3 = rx; 				// v3's type === int (auto === int)
 
 也就是：
 
-<img src="./imgs/2024/05/const-constexpr.png" style="zoom:80%;" />
+<img src="imgs/const-constexpr.png" style="zoom:80%;" />
 
 2. 但是，如果我们pass by reference，那么一切都不一样了，我们用的是pass by non-uref/pointer的rule，这个时候`expr`的constness就不会被丢掉：
 
 也就是：
 
-<img src="./imgs/2024/05/const-constexpr-2.png" alt="image-20221102010342042" style="zoom:80%;" />
+<img src="imgs/const-constexpr-2.png" alt="image-20221102010342042" style="zoom:80%;" />
 
 我是真的觉得这一套规则很尼玛蛋痛！！！但是又不得不说有其合理之处，所以真的是C++在设计的时候就过于复杂了。
 
@@ -394,17 +394,17 @@ class UpToTheCompiler {
 
 那么问题就来了，C++14’s init capture表面上和auto有着一致性，但是和C++ 11的capture by value又有着不同的类型推断机制：
 
-![image-20221102105948347](./imgs/2024/05/lambda-capture-type-deduction-0.png)
+![image-20221102105948347](imgs/lambda-capture-type-deduction-0.png)
 
 编程语言历史包袱多，偏底层难是可以理解的。但是这种不加思考地深入设计，是真的让人想骂人的。
 
 带来的是什么问题呢？看下面两个例子：
 
-![image-20221102110427586](./imgs/2024/05/lambda-capture-type-deduction.png)
+![image-20221102110427586](imgs/lambda-capture-type-deduction.png)
 
 lambda object本身的call operator的重载是一个const的（如果你不加mutable运算符），然后你capture by value一个non-const的int，然后就不能编译了。你说ok，你记下来这条规则了，你加上一个mutable不就行了？
 
-![image-20221102110617132](./imgs/2024/05/lambda-capture-type-deduction-2.png)
+![image-20221102110617132](imgs/lambda-capture-type-deduction-2.png)
 
 是啊，你如果capture的value是一个const int，然后给他加上了一个`mutable`修饰，ok，又不能够编译了，因为lambda的copy by value capture会保留cv qualifiers。
 

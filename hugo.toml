@@ -13,6 +13,7 @@ enableComments = true
 
 [params]
 Bio = "software engineer, dreams make the world a little better."
+avatarLink = 'https://avatars2.githubusercontent.com/u/16801574?s=460&v=4'
 
 [services]
   [services.disqus]
