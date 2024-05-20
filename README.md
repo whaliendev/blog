@@ -2,11 +2,11 @@
 
 a mini blog for my daily life, thoughts, and projects.
 
-Powered by [Hugo](https://gohugo.io/) and Themed by [Hugo Mini Theme](https://github.com/nodejh/hugo-theme-mini)
+Powered by [Hugo](https://gohugo.io/) and Themed by [hugo-theme-mini](https://github.com/nodejh/hugo-theme-mini)
 
 ---
 
-The following is configuration guide excerpted from the theme's [README](https://github.com/nodejh/hugo-theme-mini/README.md).
+The following is configuration guide excerpted from the original theme's [README](https://github.com/nodejh/hugo-theme-mini/README.md).
 
 ## 2. Getting started
 
