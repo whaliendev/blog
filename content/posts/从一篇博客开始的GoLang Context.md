@@ -2,11 +2,13 @@
 author: Hwa
 date: 2023-08-28
 title: 从一篇博客开始的GoLang Context
-slug: golang-context
+params:
+    slug: golang-context
 tags:
     - GoLang
     - Concurrency
 summary: "golang context from golang official blog"
+enableComments: true
 ---
 
 ## 从一篇博客开始的GoLang Context

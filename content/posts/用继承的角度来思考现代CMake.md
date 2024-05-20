@@ -3,10 +3,12 @@ author: Kuba Sejdak
 title: 用继承的角度来思考现代CMake
 date: 2023-02-14
 summary: "When we link a target, we immediately inherit (get) its `INTERFACE` and `PUBLIC` properties, and make them our own with the access level specified in the linking command. This mechanism is similar to inheritance in C++, so it should be easy to understand."
-slug: modern-cmake-targets-properties
+params:
+    slug: modern-cmake-targets-properties
 tags:
     - CMake
     - DevOps
+enableComments: true
 ---
 CMake是由Kitware的Bill Hoffman于2000年创建的。在过去的20年中，截至本文发布时，它不断发展，增加了新功能，并扩展了对第三方库的支持。但最重要的增加是在3.0版本中发布的，通常被称为“现代CMake”。尽管已经有5年多的时间了，但仍有许多程序员没有使用它们！
 
