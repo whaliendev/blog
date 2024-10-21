@@ -16,11 +16,11 @@ summary: "Template and auto type deduction have consistent rules, with exception
 
 ![image-20221101214135271](imgs/landscape.png)
 
-在最开始的时候，也就是C++98，只存在template deduction。对应的rule有两条，一条是给copy by value的，也就是图中的`T`；一条是给传递指针或引用的，也就是图中的`T&/T*`。一切都工作得很自然。
+在最开始的时候，也就是 C++98，只存在 template deduction。对应的 rule 有两条，一条是给 copy by value 的，也就是图中的`T`；一条是给传递指针或引用的，也就是图中的`T&/T*`。一切都工作得很自然。
 
-然后C++11出来了，带来了$auto,\ decltype,\ \lambda\ capture$和模板中的万能引用，也就是T&&。然后问题就开始膨胀了，这个时候开始出现了六条规则。如图所示。其中$\lambda$ capture的规则是改自模板的`T &/T*`。
+然后 C++11 出来了，带来了$auto,\ decltype,\ \lambda\ capture$和模板中的万能引用，也就是 T&&。然后问题就开始膨胀了，这个时候开始出现了六条规则。如图所示。其中$\lambda$ capture 的规则是改自模板的`T &/T*`。
 
-然后C++14也出来了，带来了auto return type和$\lambda$中的auto参数以及$\lambda$ init capture，然后还有很神奇的decltype(auto)。但是这一阶段的规则并没有变多，还是这六条的复用。
+然后 C++14 也出来了，带来了 auto return type 和$\lambda$中的 auto 参数以及$\lambda$ init capture，然后还有很神奇的 decltype(auto)。但是这一阶段的规则并没有变多，还是这六条的复用。
 
 
 
@@ -67,7 +67,7 @@ TD<decltype(y)> yType;
 
 在运行时：
 
-Scoot Myers说，上面的方法太naive了，人也能够很轻松地分辨出来具体的类型，那我们来一个稍微复杂一点的例子：
+Scoot Myers 说，上面的方法太 naive 了，人也能够很轻松地分辨出来具体的类型，那我们来一个稍微复杂一点的例子：
 
 ```cpp
 template<typename T>
@@ -83,7 +83,7 @@ if(!vw.empty()) {
 
 
 
-### 3（auto-related)Template Type Deduction
+### 3 (auto-related)Template Type Deduction
 
 一个常见的问题是：
 
@@ -101,7 +101,7 @@ f(expr);	// we have to deduce T and ParamType from expr
 
 + `ParamType`
 
-=> 经常与T不同，比如`const T&`
+=> 经常与 T 不同，比如`const T&`
 
 然后呢？`ParamType`经常又有三种情况：
 
@@ -112,8 +112,8 @@ f(expr);	// we have to deduce T and ParamType from expr
 #### 2.1 非万能引用/指针参数
 
 类型推导都非常简单：
-+ 如果`expr`类型是一个引用，那么忽略他就可以推导出T的类型。
-+ 根据`ParamType`来模式匹配`expr`的类型，以此来决定T的类型。
++ 如果`expr`类型是一个引用，那么忽略他就可以推导出 T 的类型。
++ 根据`ParamType`来模式匹配`expr`的类型，以此来决定 T 的类型。
 
 比如：
 
@@ -168,7 +168,7 @@ f(pcx);				// T === const int, param's type === const int*
 
 #### 2.2 auto 和非万能引用/指针变量
 
-auto与非万能引用/指针变量一起使用时，其实扮演的就是模板类型推断里的T的角色。也就是，是一个模式匹配的类型推断规则，这也解释了为什么我们的auto总是推断不出来引用类型和指针类型。
+auto 与非万能引用/指针变量一起使用时，其实扮演的就是模板类型推断里的 T 的角色。也就是，是一个模式匹配的类型推断规则，这也解释了为什么我们的 auto 总是推断不出来引用类型和指针类型。
 
 ```cpp
 int x = 22;
@@ -200,7 +200,7 @@ f(expr);
 
 像对待普通引用一样对待他（也就是应用模式匹配的规则来处理他），除了：
 
-+ 如果`expr`是一个左值，并且有着被推导出的类型E，那么T会被推导出`T&`。
++ 如果`expr`是一个左值，并且有着被推导出的类型 E，那么 T 会被推导出`T&`。
 
 ==> 引用会塌缩形成`E&`对于`param`参数。
 
@@ -218,15 +218,15 @@ f(22);				// x is rvalue => no special handling;
 					// T === int, param's type is int&&
 ```
 
-这个最强大的地方在于，传给我们的东西你可以不用考虑他是个左值还是右值引用，左值还是右值，我们一个`auto &&`就能够接收过来，并且保持其value category不变。甚至还能够保证其cv qualifier不发生变化。nice feature!! 不过也是有弊端的（等我了解了再说ww）。
+这个最强大的地方在于，传给我们的东西你可以不用考虑他是个左值还是右值引用，左值还是右值，我们一个`auto &&`就能够接收过来，并且保持其 value category 不变。甚至还能够保证其 cv qualifier 不发生变化。nice feature!! 不过也是有弊端的（等我了解了再说 ww）。
 
 #### 2.4 By-Value 参数
 
-推导规则相比by-ref和by-ptr有了一些不一样的地方：
+推导规则相比 by-ref 和 by-ptr 有了一些不一样的地方：
 
 + 和往常一样，如果`expr`的类型是一个引用，那直接引用就好了。
 + 如果`expr`是有`cv`修饰符修饰的，我们也直接忽略。
-+ T是应用上述两个规则的结果。
++ T 是应用上述两个规则的结果。
 
 比如：
 
@@ -242,17 +242,17 @@ f(cx);							// T === int, param's type === int
 f(rx);							// T === int, param's type === int
 ```
 
-`expr`的ref/cv-qualifiers在推导类型T的时候总是被丢掉了。
+`expr`的 ref/cv-qualifiers 在推导类型 T 的时候总是被丢掉了。
 
 **为什么会发生这种情况呢？**
 
-因为copy by value意味着全新的object，他有一个新的内存空间（stack or heap都无所谓）。所以管他传进来的是个cv qualifier还是引用，我们全都可以丢掉限定符。
+因为 copy by value 意味着全新的 object，他有一个新的内存空间（stack or heap 都无所谓）。所以管他传进来的是个 cv qualifier 还是引用，我们全都可以丢掉限定符。
 
 
 
-#### 2.5 非引用非指针autos
+#### 2.5 非引用非指针 autos
 
-auto在这里又扮演了模板deduction中T的角色：
+auto 在这里又扮演了模板 deduction 中 T 的角色：
 
 ```cpp
 int x = 22; 				// as before
@@ -263,19 +263,19 @@ auto v2 = cx; 				// v2's type === int (auto === int)
 auto v3 = rx; 				// v3's type === int (auto === int)
 ```
 
-又一次地，`expr`的引用和cv qualifiers都别丢掉了。
+又一次地，`expr`的引用和 cv qualifiers 都别丢掉了。
 
 
 
 > **Summary**
 >
-> ok，至此我们总结完了模板参数类型的推导规则，分别是非万能引用/指针，万能引用，copy-by-value。auto和模板参数类型的推导应用的是同一套规则。然后我们可以做出如下的总结：
+> ok，至此我们总结完了模板参数类型的推导规则，分别是非万能引用/指针，万能引用，copy-by-value。auto 和模板参数类型的推导应用的是同一套规则。然后我们可以做出如下的总结：
 >
-> + auto 绝对不会deduce到一个reference或pointer上（万能引用是发生了引用坍缩，不考虑）
+> + auto 绝对不会 deduce 到一个 reference 或 pointer 上（万能引用是发生了引用坍缩，不考虑）
 >
-> => 我们必须要手动地给auto加上引用和cv qualifier。
+> => 我们必须要手动地给 auto 加上引用和 cv qualifier。
 >
-> + 如果我们非要给变量加上&类型，那我们可以使用by-reference rulesets，也就是：
+> + 如果我们非要给变量加上&类型，那我们可以使用 by-reference rulesets，也就是：
 >
 >     ```cpp
 >     auto v4 = rx; 			// v4's type === int
@@ -283,37 +283,37 @@ auto v3 = rx; 				// v3's type === int (auto === int)
 >     auto &&v6 = rx; 		// v6's type === const int&, as rx is lvalue
 >     ```
 
-此外，在auto的类型推导的过程中：
+此外，在 auto 的类型推导的过程中：
 
-1. 如果我们pass by value, top level的const/volatile会被丢掉：
+1. 如果我们 pass by value, top level 的 const/volatile 会被丢掉：
 
-**注意：**只有top level的被丢掉了，因为只有这样才能保证程序的语义正确。
+**注意：**只有 top level 的被丢掉了，因为只有这样才能保证程序的语义正确。
 
 也就是：
 
 <img src="imgs/const-constexpr.png" style="zoom:80%;" />
 
-2. 但是，如果我们pass by reference，那么一切都不一样了，我们用的是pass by non-uref/pointer的rule，这个时候`expr`的constness就不会被丢掉：
+2. 但是，如果我们 pass by reference，那么一切都不一样了，我们用的是 pass by non-uref/pointer的rule，这个时候`expr`的 constness 就不会被丢掉：
 
 也就是：
 
 <img src="imgs/const-constexpr-2.png" alt="image-20221102010342042" style="zoom:80%;" />
 
-我是真的觉得这一套规则很尼玛蛋痛！！！但是又不得不说有其合理之处，所以真的是C++在设计的时候就过于复杂了。
+我是真的觉得这一套规则很尼玛蛋痛！！！但是又不得不说有其合理之处，所以真的是 C++ 在设计的时候就过于复杂了。
 
 然后是我们熟知的：
 
-对于传参，或者说给auto变量赋值，如果被赋的值是一个数组（array）或者函数（function）：
+对于传参，或者说给 auto 变量赋值，如果被赋的值是一个数组（array）或者函数（function）：
 
 + 如果用来初始化一个引用，数组/函数的类型将会得到保留
-+ 否则会在类型推导前decay到一个指针
++ 否则会在类型推导前 decay 到一个指针
 
-欧克，好像说的很清楚了，对于auto 的deduction规则，但是！但是！但是！黑色星期五来了，auto的type deduction还有一条很坏的例外：
+欧克，好像说的很清楚了，对于 auto 的 deduction 规则，但是！但是！但是！黑色星期五来了，auto 的 type deduction 还有一条很坏的例外：
 
 auto type deduction works the same as template type deduction, except with braced initializers:
 
 + 模板类型推导会失败
-+ 但是auto会推断到`std::initializer_list`上。
++ 但是 auto 会推断到`std::initializer_list`上。
 
 也就是：
 
@@ -326,11 +326,11 @@ auto x1 {{1, 2, 3}};		// error! type deduction fails
 auto x2 = {1, 2, 3};		// x's type === std::initializer_list<int>
 ```
 
-也就是braced-init-list和模板推导一样，由于braced initializers没有类型，会fail to deduce the type。但是如果是聚合类型初始化，也就是`auto x2 = {1, 2, 3}`会被推断成一个`std::initializer_list<int>`类型。OMG, f**k CPP std committee! 
+也就是 braced-init-list 和模板推导一样，由于 braced initializers 没有类型，会 fail to deduce the type。但是如果是聚合类型初始化，也就是`auto x2 = {1, 2, 3}`会被推断成一个`std::initializer_list<int>`类型。OMG, f**k CPP std committee! 
 
 
 
-也就是说，auto基本和模板的类型推断遵循一样的规则，除了对于braced initializer的处理。对于直接初始化，应用的是模板的推导规则，对于copy-list-initialization，推导到的是`std::initializer_list<int>`。只有这么一个例外。
+也就是说，auto 基本和模板的类型推断遵循一样的规则，除了对于 braced initializer 的处理。对于直接初始化，应用的是模板的推导规则，对于 copy-list-initialization，推导到的是`std::initializer_list<int>`。只有这么一个例外。
 
 具体到编译器：
 
@@ -338,7 +338,7 @@ auto x2 = {1, 2, 3};		// x's type === std::initializer_list<int>
 auto foo{1, 2, 3};
 ```
 
-g++会告诉你，`error: direct-list-initialization of 'auto' requires exactly one element`。
+g++ 会告诉你，`error: direct-list-initialization of 'auto' requires exactly one element`。
 
 对于：
 
@@ -359,24 +359,24 @@ auto foo{{1, 2, 3}};
 
 ### 4 Lambda Capture Type Deduction
 
-有三种capture方式：
+有三种 capture 方式：
 
-+ by reference：使用template type deduction的ref rulesets
-+ C++14's init capture: 使用auto的type deduction rulesets
-+ by value: 使用template的type deduction rulesets,除了cv-qualifier有被保留下来。
++ by reference：使用 template type deduction 的 ref rulesets
++ C++14's init capture: 使用 auto 的 type deduction rulesets
++ by value: 使用 template 的 type deduction rulesets，除了 cv-qualifier 有被保留下来。
 
 哈哈哈， ****！ 
 
-关于第一条，没什么好说的； 对于第二条，这是因为C++14的init capture本来的作用是为了将外界的一个变量move进lambda形成的闭包，有如下的形式：
+关于第一条，没什么好说的；对于第二条，这是因为 C++14 的 init capture 本来的作用是为了将外界的一个变量 move 进 lambda 形成的闭包，有如下的形式：
 
 ```cpp
 auto ptr = std::make_unique(5);
 auto lam = [p = std::move(ptr)](){return *p + 5};
 ```
 
-很显然，直觉上用auto的type deduction rulesets更符合表面上的一致性（ntm如果让auto的deduction rule和模板的完全一致不久不用记这么多了？）。
+很显然，直觉上用 auto 的 type deduction rulesets 更符合表面上的一致性（ntm 如果让 auto 的 deduction rule 和模板的完全一致不久不用记这么多了？）。
 
-对于第三条规则，这是因为我们一般认为lambeda的call operator是一个const的调用，因此任何captured by value的数据成员类型都是不可修改的，这也就是为什么其cv qualifer被保存了下来。
+对于第三条规则，这是因为我们一般认为 lambeda 的 call operator 是一个 const 的调用，因此任何 captured by value 的数据成员类型都是不可修改的，这也就是为什么其 cv qualifer 被保存了下来。
 
 ```cpp
 {
@@ -392,7 +392,7 @@ class UpToTheCompiler {
 }
 ```
 
-那么问题就来了，C++14’s init capture表面上和auto有着一致性，但是和C++ 11的capture by value又有着不同的类型推断机制：
+那么问题就来了，C++14’s init capture 表面上和 auto 有着一致性，但是和 C++ 11 的 capture by value 又有着不同的类型推断机制：
 
 ![image-20221102105948347](imgs/lambda-capture-type-deduction-0.png)
 
@@ -402,12 +402,12 @@ class UpToTheCompiler {
 
 ![image-20221102110427586](imgs/lambda-capture-type-deduction.png)
 
-lambda object本身的call operator的重载是一个const的（如果你不加mutable运算符），然后你capture by value一个non-const的int，然后就不能编译了。你说ok，你记下来这条规则了，你加上一个mutable不就行了？
+lambda object 本身的 call operator 的重载是一个 const 的（如果你不加 mutable 运算符），然后你 capture by value 一个 non-const 的 int，然后就不能编译了。你说 ok，你记下来这条规则了，你加上一个 mutable 不就行了？
 
 ![image-20221102110617132](imgs/lambda-capture-type-deduction-2.png)
 
-是啊，你如果capture的value是一个const int，然后给他加上了一个`mutable`修饰，ok，又不能够编译了，因为lambda的copy by value capture会保留cv qualifiers。
+是啊，你如果 capture 的 value 是一个 const int，然后给他加上了一个`mutable`修饰，ok，又不能够编译了，因为 lambda 的 copy by value capture 会保留 cv qualifiers。
 
 谁看谁不乐？
 
-可能或许必须有个人来讲讲lambda的设计历史我才能理解那群糟老头子为什么这样设计吧。
+可能或许必须有个人来讲讲 lambda 的设计历史我才能理解那群糟老头子为什么这样设计吧。

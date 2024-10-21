@@ -1,18 +1,27 @@
-baseURL = 'https://whalien.space/'
-languageCode = 'zh-cn'
 title = "whalien's blog"
+baseURL = 'https://whalien.space/'
+hasCJKLanguage = true # used by hugo to make wordcount and summary works correctly
+languageCode = 'zh-cn' # used by hugo to populate <language>, <meta> and <html> tags
+defaultContentLanguage = 'zh' # used by miniw i18n
 theme = 'github.com/whaliendev/hugo-theme-mini'
-defaultContentLanguage = 'zh'
-enableToc = true
-showToc = true
-math = true
+
+math = true # enable math typesetting globally
+enableComments = true # used by miniw to show disqus comments
+enableEmoji = true # enable render github flavored emoji
+# pagination params
 paginate = 10
 paginatePath = 'posts'
-hasCJKLanguage = true
-enableComments = true
 
 [params]
 Bio = "software engineer, dreams make the world a little better."
+Author = "whalien"
+showToc = true # showToc globally
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 4
+    ordered = false
+    startLevel = 2
 
 [services]
   [services.disqus]
